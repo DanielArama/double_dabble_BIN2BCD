@@ -13,8 +13,8 @@ module bin2bcd #(
   
   integer i, j;
     
-  // Sequential block triggered by clock, enable, and reset
-  always @(posedge clk, posedge enb, negedge reset_n) begin
+  // Sequential block triggered by clock and reset
+  always @(posedge clk, negedge reset_n) begin
     if (!reset_n) begin
       Q_reg <= 'b0; 
     end else if (enb) begin
