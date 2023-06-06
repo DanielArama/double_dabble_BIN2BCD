@@ -1,0 +1,53 @@
+module bin2bcd #(
+  parameter W = 20
+)(
+  input enb,
+  input clk,
+  input reset_n,
+  input [W-1:0] bin,
+  output wire [W+(W-4)/3+2:0] bcd,
+  output wire [7:0] s0, s1, s2, s3, s4, s5, s6
+);
+ 
+  reg [W+(W-4)/3+2:0] Q_reg, Q_next;
+  
+  integer i, j;
+    
+  // Sequential block triggered by clock, enable, and reset
+  always @(posedge clk, posedge enb, negedge reset_n) begin
+    if (!reset_n) begin
+      Q_reg <= 'b0; 
+    end else if (enb) begin
+      Q_reg <= Q_next; // Update the output with the next value
+    end else begin
+      Q_reg <= Q_next;
+    end
+  end
+  
+  // Combinational block
+  always @(*) begin
+    for (i = 0; i <= W+(W-4)/3+2; i = i+1) begin
+      Q_next[i] = 0; 
+    end  
+    
+    Q_next[W-1:0] = bin;
+    
+    for (i = 0; i <= W-4; i = i+1) begin
+      for (j = 0; j <= i/3; j = j+1) begin
+        if (Q_next[W-i+4*j-:4] > 4)
+          Q_next[W-i+4*j-:4] = Q_next[W-i+4*j-:4] + 4'd3;
+      end
+    end    
+  end
+
+  // Assign BCD and ASCII values to output signals
+  assign bcd = Q_reg;
+  assign s0 = {4'b0, Q_reg[3:0]} + 8'd48;
+  assign s1 = {4'b0, Q_reg[7:4]} + 8'd48;
+  assign s2 = {4'b0, Q_reg[11:8]} + 8'd48;
+  assign s3 = {4'b0, Q_reg[15:12]} + 8'd48;
+  assign s4 = {4'b0, Q_reg[19:16]} + 8'd48;
+  assign s5 = {4'b0, Q_reg[23:20]} + 8'd48;
+  assign s6 = {4'b0, Q_reg[27:24]} + 8'd48;
+  
+endmodule
