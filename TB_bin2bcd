@@ -1,0 +1,44 @@
+module TB_bin2bcd();
+    
+    parameter W =20;
+    reg enb=1'b0;
+    reg clk =1'b0;
+    reg reset_n=1'b0;
+    reg [W-1:0] bin;
+    
+    wire [W+(W-4)/3+2:0] bcd;
+    wire [7:0] s0,s1,s2,s3,s4,s5,s6; //ASCII 
+    
+   bin2bcd #(.W(W)) UUT ( 
+    .enb(enb),
+    .clk(clk),
+    .reset_n(reset_n),
+    .bin(bin),  
+    .bcd(bcd),
+    .s0(s0),
+    .s1(s1),
+    .s2(s2),
+    .s3(s3),
+    .s4(s4),
+    .s5(s5),
+    .s6(s6)
+   ); 
+    
+    always begin
+    #10; clk=~clk;
+    end
+    
+    initial begin
+    reset_n=1'b1;
+    enb =1'b1;
+    bin='b1111_1111_1111_1111_1111;
+    #20;
+    bin='b1111_1110_1111_1011_1011;
+    #20;
+    bin='b0101_1111_1011_1111_1101;
+    #20;
+
+    $stop;
+    end
+    
+endmodule
