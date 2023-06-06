@@ -1,8 +1,8 @@
 # double_dabble_BIN2BCD
 # Binary to BCD Converter
 
-This module converts a binary number to Binary-Coded Decimal (BCD) format and provides the BCD digits as output.
-It also allows the output to be transmitted via UART in ASCII code.
+The `bin2bcd` module is a Verilog code that converts a binary number to Binary-Coded Decimal (BCD)
+format and provides the BCD digits as output. It also allows the output to be transmitted via UART in ASCII code.
 
 ## Usage
 
@@ -20,9 +20,8 @@ The module provides the following outputs:
 
 ## Implementation Details
 
-The conversion from binary to BCD is done using a sequential and combinational logic.
-The sequential logic updates the BCD output based on the enable signal and clock,
-while the combinational logic performs the actual conversion.
+The conversion from binary to BCD is performed using a combination of sequential and combinational logic.
+The sequential logic is triggered by the clock and reset signals, while the combinational logic performs the actual conversion.
 
 The conversion process involves breaking down the binary number into individual BCD digits.
 Each 4-bit BCD digit is then converted to its corresponding ASCII code for UART transmission.
